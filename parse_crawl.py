@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import sys, re, os, requests, mimetypes
+import sys, re, os, requests, mimetypes, glob
 import pandas as pd
 
 if len(sys.argv) != 2 :
@@ -24,7 +24,13 @@ for i,row in df.iterrows():
             os.makedirs(path)
         col_name = str(df.columns[j-1])
         file_name = file_tag + col_name
-        print("\t- " + file_name)
+        found = glob.glob(file_name + "*")
+        if len(found) > 1:
+            raise AssertionError()
+        if len(found) == 1:
+            print("\t[old] " + file_name)
+            continue
+        print("\t[new] " + file_name)
         response = requests.get(urls[0], allow_redirects=True)
         content_type = response.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
