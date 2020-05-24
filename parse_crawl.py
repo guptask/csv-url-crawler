@@ -7,10 +7,17 @@ if len(sys.argv) != 2 :
     raise ValueError("Enter ./parse_crawl <csv_file>")
 
 df = pd.read_csv(filepath_or_buffer = sys.argv[1])
+
+logfile = "errlog.txt"
+if os.path.exists(logfile):
+    os.remove(logfile)
+log = open(logfile,'a+')
+
 for i,row in df.iterrows():
-    path = "results/" + str(row["Name"]) + "/"
-    file_tag = path + str(row["Name"]) + " - "
-    print(row["Name"])
+    unique_id = str(row["Name"]) + " - " + str(row["Email"])
+    path = "results/" + unique_id + "/"
+    file_tag = path + unique_id + " - "
+    print unique_id
     j = 0
     for x in row:
         val = str(x)
@@ -32,6 +39,9 @@ for i,row in df.iterrows():
             continue
         print("\t[new] " + file_name)
         response = requests.get(urls[0], allow_redirects=True)
+        if "content-type" not in response.headers.keys():
+            log.write(unique_id + " - " + col_name + "\n")
+            continue
         content_type = response.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
         open(file_name + extension, 'wb').write(response.content)
