@@ -38,18 +38,19 @@ for i,row in df.iterrows():
         if len(found) > 1:
             raise AssertionError()
         if len(found) == 1:
-            print("\t[old] " + file_name)
+            print("\t[old] " + col_name)
             continue
 
         response = requests.get(urls[0], allow_redirects=True)
         if r'Content-Type' not in response.headers.keys():
-            print("\t[err] " + file_name)
+            print("\t[err] " + col_name)
             log = open('errlog.txt','a')
             log.write(unique_id + r' - ' + col_name + "\n")
             log.close()
             continue
 
-        print("\t[new] " + file_name)
+        print("\t[new] " + col_name)
         content_type = response.headers['Content-Type']
         extension = mimetypes.guess_extension(content_type)
         open(file_name + extension, 'wb').write(response.content)
+
