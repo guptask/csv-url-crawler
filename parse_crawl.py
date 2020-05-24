@@ -40,14 +40,16 @@ for i,row in df.iterrows():
         if len(found) == 1:
             print("\t[old] " + file_name)
             continue
-        print("\t[new] " + file_name)
 
         response = requests.get(urls[0], allow_redirects=True)
-        if "content-type" not in response.headers.keys():
+        if r'Content-Type' not in response.headers.keys():
+            print("\t[err] " + file_name)
             log = open('errlog.txt','a')
             log.write(unique_id + r' - ' + col_name + "\n")
             log.close()
             continue
-        content_type = response.headers['content-type']
+
+        print("\t[new] " + file_name)
+        content_type = response.headers['Content-Type']
         extension = mimetypes.guess_extension(content_type)
         open(file_name + extension, 'wb').write(response.content)
