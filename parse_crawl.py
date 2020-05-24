@@ -6,8 +6,11 @@ import pandas as pd
 if len(sys.argv) != 2 :
     raise ValueError("Enter ./parse_crawl <csv_file>")
 
+logfile = "errlog.txt"
+if os.path.exists(logfile):
+    os.remove(logfile)
+
 df = pd.read_csv(filepath_or_buffer = sys.argv[1])
-log = open('errlog.txt','w+')
 
 for i,row in df.iterrows():
     unique_id = str(row["Name"]) + r' - ' + str(row["Email"])
@@ -41,7 +44,9 @@ for i,row in df.iterrows():
 
         response = requests.get(urls[0], allow_redirects=True)
         if "content-type" not in response.headers.keys():
+            log = open('errlog.txt','a')
             log.write(unique_id + r' - ' + col_name + "\n")
+            log.close()
             continue
         content_type = response.headers['content-type']
         extension = mimetypes.guess_extension(content_type)
