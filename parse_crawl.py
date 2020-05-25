@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""Parse a CSV, find URLs and download these in a certain format"""
+
+__author__ = "Sounak Gupta"
+__license__ = "GPLv3"
+
 import sys, re, os, requests, mimetypes, glob
 import pandas as pd
 
@@ -16,7 +21,7 @@ for i,row in df.iterrows():
     unique_id = str(row["Name"]) + r' - ' + str(row["Email"])
     path = r'results/' + unique_id + r'/'
     file_tag = path + unique_id + r' - '
-    print unique_id
+    print(unique_id)
     j = 0
 
     for x in row:
