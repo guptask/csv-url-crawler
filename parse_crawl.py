@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 """Parse a CSV, find URLs and download these in a certain format"""
 
